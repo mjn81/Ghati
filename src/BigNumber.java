@@ -4,6 +4,7 @@ import java.util.IllegalFormatCodePointException;
 class BigNumber {
     public static final BigNumber ZERO = new BigNumber("0");
     public static final BigNumber ONE = new BigNumber("1");
+    public static final BigNumber MONE = new BigNumber("-1");
 
     private int [] digits = new int[20];
     private boolean isNegative = false;
@@ -105,17 +106,18 @@ class BigNumber {
             return cl2.minus(cl);
         }
 
-        var com = toStringZero().compareTo(other.toStringZero());
+        var com = compareTo(other);
 
         if (com == 0){
             return ZERO;
         }
         if(com <0){
-            var res = other.minus(this);
+            var c = other.clone();
+            var res = c.minus(this);
             res.isNegative = !res.isNegative;
             return res;
         }
-        var res = clone();
+        var res = ZERO.clone();
         for (int i = 0; i < digits.length; i++) {
             var m = digits[i] - other.digits[i];
             if (m<0){
@@ -143,17 +145,17 @@ class BigNumber {
             res = res.plus(temp.shiftLeft(j));
         }
         res.isNegative = isNegative != other.isNegative;
-        if (toString().equals("0")||other.toString().equals("0")){
+        if (equals(ZERO)||other.equals(ZERO)){
             return ZERO;
         }
         return res;
     }
 
     public BigNumber toThePowerOf(BigNumber other) {
-        if (other.toString().equals("0")){
+        if (other.equals(ZERO)){
             return ONE;
         }
-        if (toString().equals("0")){
+        if (equals(ZERO)){
             return ZERO;
         }
         var res = this.clone();
@@ -179,6 +181,15 @@ class BigNumber {
         res = new StringBuilder(res.toString().replace(" ", "0"));
         var ws = res.length()==1 ? "0" : res.substring(0 , res.length()-1);
         return (isNegative ? "-" : "") + ws;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        return toString().equals(other.toString());
+    }
+
+    public int compareTo(BigNumber other){
+        return toStringZero().compareTo(other.toStringZero());
     }
 
     private String toStringZero(){

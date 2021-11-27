@@ -17,6 +17,7 @@ public class Node {
 
     @Override
     public boolean equals(Object other){
-        return toString().equals(other.toString());
+        Node tmp = (Node) other;
+        return expo.equals(tmp.expo);
     }
 }
