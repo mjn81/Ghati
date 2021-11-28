@@ -1,3 +1,4 @@
+import java.lang.management.BufferPoolMXBean;
 import java.util.Scanner;
 
 public class Ghati {
@@ -13,17 +14,11 @@ public class Ghati {
 
         calculatePolynomialOperations();
         calculateBigNumberOperations();
-//
-//        sortResults();
-//
-//        int index = findTarget();
-//        System.out.println(index);
 
-        for (int i = 0; i < n+m; i++) {
-            System.out.println(results[i]);
-        }
+        sortResults();
 
-
+        int index = findTarget();
+        System.out.println(index);
     }
 
     private static void init() {
@@ -57,16 +52,7 @@ public class Ghati {
             big[i] = new BigNumber(res[0]);
             bigOp[i] = res[1];
         }
-
-
             results = new BigNumber[n+m];
-
-//        for (int i = 0; i < n; i++) {
-//            System.out.println(pol[i][0] + " " + polyOp[i] +  " " + pol[i][1]);
-//        }
-//        for (int i = 0; i < m; i++) {
-//            System.out.println(big[i] + " " + bigOp[i]);
-//        }
     }
 
     private static void calculatePolynomialOperations() {
@@ -104,13 +90,31 @@ public class Ghati {
         }
     }
 
-//    private static void sortResults() {
-//          TODO : sort :)
-//    }
+    private static void sortResults() {
+        for (int i = 0; i < n+m; i++) {
+            for (int j = i+1; j < n + m; j++) {
+                if (results[i].compareTo(results[j])>0){
+                    BigNumber tmp = results[i];
+                    results[i] = results[j];
+                    results[j] = tmp;
+                }
+            }
+        }
+    }
 
-//    private static int findTarget() {
-//        // TODO: your code ...
-//    }
+    private static int findTarget() {
+        int l = 0, r = n+m-1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (results[mid].equals(target))
+                return mid;
+            if (results[mid].compareTo(target)<0)
+                l = mid + 1;
+            else
+                r = mid - 1;
+        }
+        return -1;
+    }
 
 
     private static void splitPoly(String in , int row){
