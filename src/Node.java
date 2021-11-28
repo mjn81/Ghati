@@ -17,6 +17,10 @@ public class Node {
 
     @Override
     public boolean equals(Object other){
+        // Should throw exception but for now it works :)
+        if (!(other instanceof Node)){
+            return false;
+        }
         Node tmp = (Node) other;
         return expo.equals(tmp.expo);
     }

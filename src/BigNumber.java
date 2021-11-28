@@ -1,6 +1,3 @@
-import java.lang.management.BufferPoolMXBean;
-import java.util.IllegalFormatCodePointException;
-
 class BigNumber {
     public static final BigNumber ZERO = new BigNumber("0");
     public static final BigNumber ONE = new BigNumber("1");
@@ -185,6 +182,10 @@ class BigNumber {
 
     @Override
     public boolean equals(Object other){
+        // Should throw exception but for now it works :)
+        if (!(other instanceof BigNumber)){
+            return false;
+        }
         return toString().equals(other.toString());
     }
 

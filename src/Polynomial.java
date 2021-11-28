@@ -1,6 +1,3 @@
-import java.lang.management.BufferPoolMXBean;
-import java.lang.reflect.Array;
-
 class Polynomial {
     private int avail;
     private Node [] arr;
@@ -80,15 +77,34 @@ class Polynomial {
             }
         }
         // solving original algorithms ( the one in the book) Bug
-        var last = arr[avail-1].expo.compareTo(other.arr[other.avail-1].expo)>0 ? other.arr[other.avail-1] : arr[avail-1];
-        res.add(last.coef , last.expo);
+        if (arr[avail-1].expo.compareTo(other.arr[other.avail-1].expo)>0){
+            var last =  other.arr[other.avail-1];
+            res.add(last.coef.times(BigNumber.MONE) , last.expo);
+        }else{
+            var last= arr[avail-1];
+            res.add(last.coef , last.expo);
+        }
         return res;
     }
 
-//    public Polynomial times(Polynomial other) {
-//        // TODO: your code ...
-//    }
-//
+    public Polynomial times(Polynomial other) {
+        Polynomial res = new Polynomial();
+
+        for (int i = 0; i < avail; i++) {
+            for (int j = 0; j < other.avail; j++) {
+                var n = new Node(arr[i].coef.times(other.arr[j].coef) , arr[i].expo.plus(other.arr[j].expo));
+                if (res.exists(n)){
+                    Polynomial tmp = new Polynomial();
+                    tmp.add(n.coef , n.expo);
+                    res = res.plus(tmp);
+                }else{
+                    res.add(n.coef , n.expo);
+                }
+            }
+        }
+        return res;
+    }
+
     public boolean isZero() {
         return arr[0].coef.equals(BigNumber.ZERO);
     }
@@ -99,6 +115,7 @@ class Polynomial {
                 return arr[i].coef;
             }
         }
+        // just to get no error
         return BigNumber.ZERO;
     }
 
@@ -127,14 +144,7 @@ class Polynomial {
             arr[j + 1] = key;
         }
     }
-//    @Override
-//    public Polynomial clone(){
-//        var c =  new Polynomial();
-//        for (int i = 0; i < avail; i++) {
-//            c.add(arr[i].coef , arr[i].expo);
-//        }
-//        return c;
-//    }
+
 
     @Override
     public String toString(){
@@ -145,5 +155,12 @@ class Polynomial {
         return res.toString();
     }
 
+    public BigNumber toBigNumber(BigNumber x){
+        BigNumber res = BigNumber.ZERO.clone();
+        for (int i = 0; i < avail; i++) {
+            res = res.plus(arr[i].coef.times(x.toThePowerOf(arr[i].expo)));
+        }
+        return res;
+    }
 
 }
