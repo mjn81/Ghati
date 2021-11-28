@@ -181,11 +181,7 @@ public class Ghati {
                 counter++;
             }
         }
-//        var polyStr = in.split(" ");
-//        var
-//        for (var s : polyStr) {
-//            System.out.println(s);
-//        }
+/// for regex version
         // operator splitter
 //        for (var s : op) {
 //            if (s.equals("-")){
